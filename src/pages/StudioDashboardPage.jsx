@@ -477,10 +477,300 @@ export default function StudioDashboardPage() {
         {/* Analytics Tab */}
         {activeTab === 'analytics' && (
           <div className="space-y-6">
-            <h1 className="text-3xl font-bold text-gray-900">Analytics</h1>
-            <Card className="p-12 text-center">
-              <p className="text-gray-600">Analytics dashboard coming soon...</p>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Analytics & Insights</h1>
+              <p className="text-gray-600 mt-1">Track your studio's performance and growth</p>
+            </div>
+
+            {/* Time Period Selector */}
+            <div className="flex justify-end">
+              <select className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500">
+                <option>Last 7 Days</option>
+                <option>Last 30 Days</option>
+                <option>Last 3 Months</option>
+                <option>This Year</option>
+              </select>
+            </div>
+
+            {/* Key Metrics Grid */}
+            {loading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {[1, 2, 3, 4].map((i) => (
+                  <StudioCardSkeleton key={i} />
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <Card className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <p className="text-sm text-gray-600">Total Revenue</p>
+                    <span className="text-xs text-success-600 font-medium bg-success-50 px-2 py-1 rounded">
+                      +12.5%
+                    </span>
+                  </div>
+                  <p className="text-3xl font-bold text-gray-900 mb-1">$24,850</p>
+                  <p className="text-xs text-gray-500">vs. $22,100 last period</p>
+                </Card>
+
+                <Card className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <p className="text-sm text-gray-600">Total Bookings</p>
+                    <span className="text-xs text-success-600 font-medium bg-success-50 px-2 py-1 rounded">
+                      +8.3%
+                    </span>
+                  </div>
+                  <p className="text-3xl font-bold text-gray-900 mb-1">487</p>
+                  <p className="text-xs text-gray-500">vs. 450 last period</p>
+                </Card>
+
+                <Card className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <p className="text-sm text-gray-600">Avg. Class Size</p>
+                    <span className="text-xs text-error-600 font-medium bg-error-50 px-2 py-1 rounded">
+                      -2.1%
+                    </span>
+                  </div>
+                  <p className="text-3xl font-bold text-gray-900 mb-1">18.2</p>
+                  <p className="text-xs text-gray-500">vs. 18.6 last period</p>
+                </Card>
+
+                <Card className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <p className="text-sm text-gray-600">Cancellation Rate</p>
+                    <span className="text-xs text-success-600 font-medium bg-success-50 px-2 py-1 rounded">
+                      -1.8%
+                    </span>
+                  </div>
+                  <p className="text-3xl font-bold text-gray-900 mb-1">4.2%</p>
+                  <p className="text-xs text-gray-500">vs. 6.0% last period</p>
+                </Card>
+              </div>
+            )}
+
+            {/* Revenue Chart */}
+            <Card className="p-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-6">Revenue Trend</h2>
+              <div className="h-64 flex items-end justify-between gap-2">
+                {[
+                  { label: 'Mon', value: 85, amount: '$2,890' },
+                  { label: 'Tue', value: 72, amount: '$2,450' },
+                  { label: 'Wed', value: 95, amount: '$3,230' },
+                  { label: 'Thu', value: 68, amount: '$2,310' },
+                  { label: 'Fri', value: 88, amount: '$2,990' },
+                  { label: 'Sat', value: 100, amount: '$3,400' },
+                  { label: 'Sun', value: 92, amount: '$3,130' }
+                ].map((day, idx) => (
+                  <div key={idx} className="flex-1 flex flex-col items-center group">
+                    <div className="relative w-full mb-2">
+                      <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                        {day.amount}
+                      </div>
+                      <div
+                        className="w-full bg-gradient-to-t from-primary-600 to-primary-400 rounded-t-lg transition-all duration-300 hover:from-primary-700 hover:to-primary-500 cursor-pointer"
+                        style={{ height: `${(day.value / 100) * 240}px` }}
+                      ></div>
+                    </div>
+                    <p className="text-xs text-gray-600 mt-2">{day.label}</p>
+                  </div>
+                ))}
+              </div>
             </Card>
+
+            {/* Class Performance & Popular Times */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Top Performing Classes */}
+              <Card className="p-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-4">Top Performing Classes</h2>
+                <div className="space-y-4">
+                  {[
+                    { name: 'Morning Yoga Flow', bookings: 142, revenue: '$4,260', trend: '+15%' },
+                    { name: 'HIIT Training', bookings: 128, revenue: '$3,840', trend: '+12%' },
+                    { name: 'Evening Meditation', bookings: 98, revenue: '$2,940', trend: '+8%' },
+                    { name: 'Power Pilates', bookings: 87, revenue: '$2,610', trend: '+5%' },
+                    { name: 'Spin Class', bookings: 76, revenue: '$2,280', trend: '+3%' }
+                  ].map((cls, idx) => (
+                    <div key={idx} className="flex items-center gap-4">
+                      <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-primary-600 font-bold text-sm">#{idx + 1}</span>
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-medium text-gray-900">{cls.name}</p>
+                        <p className="text-sm text-gray-600">{cls.bookings} bookings • {cls.revenue}</p>
+                      </div>
+                      <span className="text-xs text-success-600 font-medium bg-success-50 px-2 py-1 rounded">
+                        {cls.trend}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+
+              {/* Peak Hours */}
+              <Card className="p-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-4">Popular Time Slots</h2>
+                <div className="space-y-3">
+                  {[
+                    { time: '6:00 AM - 8:00 AM', percentage: 92, bookings: 156 },
+                    { time: '8:00 AM - 10:00 AM', percentage: 78, bookings: 132 },
+                    { time: '5:00 PM - 7:00 PM', percentage: 95, bookings: 161 },
+                    { time: '7:00 PM - 9:00 PM', percentage: 68, bookings: 115 },
+                    { time: '10:00 AM - 12:00 PM', percentage: 45, bookings: 76 },
+                    { time: '12:00 PM - 2:00 PM', percentage: 38, bookings: 64 }
+                  ].map((slot, idx) => (
+                    <div key={idx}>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-sm font-medium text-gray-700">{slot.time}</span>
+                        <span className="text-sm text-gray-600">{slot.bookings} bookings</span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div
+                          className="bg-gradient-to-r from-secondary-500 to-secondary-600 h-2 rounded-full transition-all duration-500"
+                          style={{ width: `${slot.percentage}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </div>
+
+            {/* Instructor Performance */}
+            <Card className="p-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-4">Instructor Performance</h2>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-gray-200">
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Instructor</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Classes Taught</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Avg. Attendance</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Rating</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Revenue</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Trend</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { name: 'Sarah Johnson', classes: 24, attendance: '22.5', rating: 4.9, revenue: '$7,200', trend: '+18%', trendUp: true },
+                      { name: 'Mike Chen', classes: 22, attendance: '20.8', rating: 4.8, revenue: '$6,600', trend: '+12%', trendUp: true },
+                      { name: 'Emma Davis', classes: 18, attendance: '18.2', rating: 4.7, revenue: '$5,400', trend: '+8%', trendUp: true },
+                      { name: 'James Wilson', classes: 16, attendance: '16.5', rating: 4.6, revenue: '$4,800', trend: '-3%', trendUp: false }
+                    ].map((instructor, idx) => (
+                      <tr key={idx} className="border-b border-gray-100 hover:bg-gray-50">
+                        <td className="py-3 px-4">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
+                              <span className="text-primary-600 font-semibold text-sm">
+                                {instructor.name.split(' ').map(n => n[0]).join('')}
+                              </span>
+                            </div>
+                            <span className="font-medium text-gray-900">{instructor.name}</span>
+                          </div>
+                        </td>
+                        <td className="py-3 px-4 text-sm text-gray-900">{instructor.classes}</td>
+                        <td className="py-3 px-4 text-sm text-gray-900">{instructor.attendance}</td>
+                        <td className="py-3 px-4">
+                          <div className="flex items-center gap-1">
+                            <svg className="w-4 h-4 text-warning-500 fill-current" viewBox="0 0 20 20">
+                              <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                            </svg>
+                            <span className="text-sm font-medium text-gray-900">{instructor.rating}</span>
+                          </div>
+                        </td>
+                        <td className="py-3 px-4 text-sm font-medium text-gray-900">{instructor.revenue}</td>
+                        <td className="py-3 px-4">
+                          <span className={`text-xs font-medium px-2 py-1 rounded ${
+                            instructor.trendUp ? 'text-success-600 bg-success-50' : 'text-error-600 bg-error-50'
+                          }`}>
+                            {instructor.trend}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </Card>
+
+            {/* Member Retention & Class Distribution */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Member Retention */}
+              <Card className="p-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-4">Member Retention</h2>
+                <div className="flex items-center justify-center h-48">
+                  <div className="relative w-48 h-48">
+                    {/* Donut chart representation */}
+                    <svg className="w-48 h-48 transform -rotate-90">
+                      <circle
+                        cx="96"
+                        cy="96"
+                        r="80"
+                        stroke="#e5e7eb"
+                        strokeWidth="24"
+                        fill="none"
+                      />
+                      <circle
+                        cx="96"
+                        cy="96"
+                        r="80"
+                        stroke="#10b981"
+                        strokeWidth="24"
+                        fill="none"
+                        strokeDasharray={`${(87 / 100) * 502.4} 502.4`}
+                        className="transition-all duration-1000"
+                      />
+                    </svg>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                      <p className="text-4xl font-bold text-gray-900">87%</p>
+                      <p className="text-sm text-gray-600">Retention Rate</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4 mt-6">
+                  <div className="text-center">
+                    <p className="text-2xl font-bold text-success-600">342</p>
+                    <p className="text-xs text-gray-600">Active Members</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-2xl font-bold text-error-600">51</p>
+                    <p className="text-xs text-gray-600">Churned (30d)</p>
+                  </div>
+                </div>
+              </Card>
+
+              {/* Class Type Distribution */}
+              <Card className="p-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-4">Class Type Distribution</h2>
+                <div className="space-y-4">
+                  {[
+                    { type: 'Yoga', percentage: 35, count: 87, color: 'bg-purple-500' },
+                    { type: 'HIIT', percentage: 25, count: 62, color: 'bg-red-500' },
+                    { type: 'Pilates', percentage: 20, count: 50, color: 'bg-pink-500' },
+                    { type: 'Spin', percentage: 12, count: 30, color: 'bg-blue-500' },
+                    { type: 'Meditation', percentage: 8, count: 20, color: 'bg-green-500' }
+                  ].map((type, idx) => (
+                    <div key={idx}>
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <div className={`w-3 h-3 rounded-full ${type.color}`}></div>
+                          <span className="text-sm font-medium text-gray-700">{type.type}</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="text-sm text-gray-600">{type.count} classes</span>
+                          <span className="text-sm font-semibold text-gray-900 w-12 text-right">{type.percentage}%</span>
+                        </div>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div
+                          className={`${type.color} h-2 rounded-full transition-all duration-500`}
+                          style={{ width: `${type.percentage}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </div>
           </div>
         )}
 
