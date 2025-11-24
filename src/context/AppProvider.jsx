@@ -248,26 +248,9 @@ export default function AppProvider({ children }) {
 
       dispatch({ type: ACTIONS.SET_USER, payload: userData })
 
-      // Fetch bookings and favorites (with timeout to prevent hanging)
-      try {
-        const timeoutPromise = new Promise((_, reject) =>
-          setTimeout(() => reject(new Error('Fetch timeout')), 5000)
-        )
-
-        const bookingsPromise = fetchUserBookings(session.user.id)
-        const favoritesPromise = fetchUserFavorites(session.user.id)
-
-        const [bookings, favorites] = await Promise.race([
-          Promise.all([bookingsPromise, favoritesPromise]),
-          timeoutPromise
-        ])
-
-        dispatch({ type: ACTIONS.UPDATE_BOOKINGS, payload: bookings })
-        dispatch({ type: ACTIONS.SET_FAVORITES, payload: favorites })
-      } catch (fetchError) {
-        console.warn('Failed to fetch bookings/favorites:', fetchError.message)
-        // Continue anyway - user can use the app without this data
-      }
+      // TODO: Re-enable when bookings/favorites tables are created and have RLS policies
+      // For now, skip fetching to prevent hanging
+      console.log('📝 Skipping bookings/favorites fetch - tables not configured yet')
 
     } catch (error) {
       console.error('Error initializing user data:', error)
