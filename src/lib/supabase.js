@@ -13,15 +13,16 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
+// MOCK DATA MODE: Skip Supabase initialization if env vars missing
 // Validate environment variables
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error(
-    'Missing Supabase environment variables. Please check your .env file.'
-  )
-}
+// if (!supabaseUrl || !supabaseAnonKey) {
+//   throw new Error(
+//     'Missing Supabase environment variables. Please check your .env file.'
+//   )
+// }
 
-// Create and export the Supabase client
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+// Create and export the Supabase client (or null if in mock mode)
+export const supabase = (supabaseUrl && supabaseAnonKey) ? createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     // SIMPLIFIED: Minimal auth config to avoid hanging queries
     autoRefreshToken: false,  // Changed from true
@@ -34,7 +35,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
       'x-application-name': 'FitConnect',
     },
   },
-})
+}) : null
 
 /**
  * Helper function to check if user is authenticated
