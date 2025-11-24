@@ -271,6 +271,14 @@ export default function AppProvider({ children }) {
    * Set up Supabase auth state listener
    */
   useEffect(() => {
+    // Check if Supabase is initialized
+    if (!supabase) {
+      console.warn('⚠️ Supabase not initialized - missing environment variables')
+      dispatch({ type: ACTIONS.SET_LOADING, payload: false })
+      setInitialized(true)
+      return
+    }
+
     let mounted = true
 
     // Get initial session
