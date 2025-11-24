@@ -268,15 +268,9 @@ export default function AppProvider({ children }) {
   }
 
   /**
-   * Set up Supabase auth state listener - DISABLED FOR MOCK DATA MODE
+   * Set up Supabase auth state listener
    */
   useEffect(() => {
-    // MOCK DATA MODE - Skip auth initialization
-    console.log('🔧 MOCK DATA MODE - Auth disabled')
-    dispatch({ type: ACTIONS.SET_LOADING, payload: false })
-    setInitialized(true)
-
-    /* SUPABASE AUTH - COMMENTED OUT
     let mounted = true
 
     // Get initial session
@@ -340,7 +334,6 @@ export default function AppProvider({ children }) {
       mounted = false
       subscription.unsubscribe()
     }
-    */
   }, [])
 
   /**

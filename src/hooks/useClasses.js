@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react'
-// import { supabase } from '../lib/supabase'
-import { classes as mockClasses } from '../data/mockData'
+import { supabase } from '../lib/supabase'
 
 /**
  * useClasses Hook
  *
- * Returns mock classes data with optional filters
+ * Fetches classes from Supabase with optional filters
  * Returns { classes, loading, error, refetch }
  */
 export function useClasses(filters = {}) {
@@ -18,39 +17,52 @@ export function useClasses(filters = {}) {
       setLoading(true)
       setError(null)
 
-      // USING MOCK DATA
-      let result = [...mockClasses]
+      // Start building the query
+      let query = supabase
+        .from('classes')
+        .select(`
+          *,
+          studio:studios(*),
+          instructor:instructors(*)
+        `)
 
       // Apply filters
       if (filters.type && filters.type.length > 0) {
-        result = result.filter(c => filters.type.includes(c.type))
+        query = query.in('type', filters.type)
       }
 
       if (filters.difficulty) {
-        result = result.filter(c => c.difficulty === filters.difficulty)
+        query = query.eq('difficulty', filters.difficulty)
       }
 
       if (filters.studioId) {
-        result = result.filter(c => c.studio?.id === filters.studioId)
+        query = query.eq('studio_id', filters.studioId)
       }
 
       if (filters.instructorId) {
-        result = result.filter(c => c.instructor?.id === filters.instructorId)
+        query = query.eq('instructor_id', filters.instructorId)
       }
 
       if (filters.date) {
-        result = result.filter(c => c.date === filters.date)
+        query = query.eq('date', filters.date)
       }
 
       if (filters.minPrice) {
-        result = result.filter(c => c.price >= filters.minPrice)
+        query = query.gte('price', filters.minPrice)
       }
 
       if (filters.maxPrice) {
-        result = result.filter(c => c.price <= filters.maxPrice)
+        query = query.lte('price', filters.maxPrice)
       }
 
-      // Apply search term if provided
+      // Execute query
+      const { data, error: fetchError } = await query
+
+      if (fetchError) throw fetchError
+
+      let result = data || []
+
+      // Apply search term (client-side for simplicity)
       if (filters.searchTerm) {
         const term = filters.searchTerm.toLowerCase()
         result = result.filter(c =>
@@ -70,7 +82,7 @@ export function useClasses(filters = {}) {
             result.sort((a, b) => a.price - b.price)
             break
           case 'popularity':
-            result.sort((a, b) => b.currentCapacity - a.currentCapacity)
+            result.sort((a, b) => b.current_capacity - a.current_capacity)
             break
           default:
             result.sort((a, b) => {
@@ -90,6 +102,7 @@ export function useClasses(filters = {}) {
 
       setClasses(result)
     } catch (err) {
+      console.error('Error fetching classes:', err)
       setError(err.message)
     } finally {
       setLoading(false)
@@ -116,7 +129,7 @@ export function useClasses(filters = {}) {
 /**
  * useClass Hook
  *
- * Fetches a single class by ID from mock data
+ * Fetches a single class by ID from Supabase
  */
 export function useClass(classId) {
   const [classData, setClassData] = useState(null)
@@ -129,8 +142,18 @@ export function useClass(classId) {
         setLoading(true)
         setError(null)
 
-        // USING MOCK DATA
-        const data = mockClasses.find(c => c.id === parseInt(classId))
+        // Fetch from Supabase
+        const { data, error: fetchError } = await supabase
+          .from('classes')
+          .select(`
+            *,
+            studio:studios(*),
+            instructor:instructors(*)
+          `)
+          .eq('id', classId)
+          .single()
+
+        if (fetchError) throw fetchError
 
         if (!data) {
           throw new Error('Class not found')
