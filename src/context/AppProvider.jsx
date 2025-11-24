@@ -156,11 +156,9 @@ export default function AppProvider({ children }) {
         .single()
 
       if (error) {
-        // If profile doesn't exist, return null (user needs to complete profile)
-        if (error.code === 'PGRST116') {
-          return null
-        }
-        throw error
+        // If profile doesn't exist or table/RLS issues, return null
+        console.warn('User profile fetch failed:', error.code, error.message)
+        return null
       }
 
       return data
@@ -250,14 +248,26 @@ export default function AppProvider({ children }) {
 
       dispatch({ type: ACTIONS.SET_USER, payload: userData })
 
-      // Fetch bookings and favorites
-      const [bookings, favorites] = await Promise.all([
-        fetchUserBookings(session.user.id),
-        fetchUserFavorites(session.user.id)
-      ])
+      // Fetch bookings and favorites (with timeout to prevent hanging)
+      try {
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Fetch timeout')), 5000)
+        )
 
-      dispatch({ type: ACTIONS.UPDATE_BOOKINGS, payload: bookings })
-      dispatch({ type: ACTIONS.SET_FAVORITES, payload: favorites })
+        const bookingsPromise = fetchUserBookings(session.user.id)
+        const favoritesPromise = fetchUserFavorites(session.user.id)
+
+        const [bookings, favorites] = await Promise.race([
+          Promise.all([bookingsPromise, favoritesPromise]),
+          timeoutPromise
+        ])
+
+        dispatch({ type: ACTIONS.UPDATE_BOOKINGS, payload: bookings })
+        dispatch({ type: ACTIONS.SET_FAVORITES, payload: favorites })
+      } catch (fetchError) {
+        console.warn('Failed to fetch bookings/favorites:', fetchError.message)
+        // Continue anyway - user can use the app without this data
+      }
 
     } catch (error) {
       console.error('Error initializing user data:', error)
