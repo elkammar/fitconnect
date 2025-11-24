@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Button, Card, Badge } from '../components/ui'
 import { Spinner, ProgressBar } from '../components/LoadingStates'
-import { getClassById, getStudioById, getInstructorById } from '../data/mockData'
+import { useClass } from '../hooks/useClasses'
 import useApp from '../hooks/useApp'
 
 /**
@@ -33,17 +33,20 @@ export default function BookingPage() {
     emergencyContact: ''
   })
 
-  // Get class data
-  const classData = getClassById(parseInt(classId))
-  const studioData = classData ? getStudioById(classData.studioId) : null
-  const instructorData = classData ? getInstructorById(classData.instructorId) : null
+  // Get class data using the hook (handles both UUIDs and numeric IDs)
+  const { classData, loading: classLoading, error: classError } = useClass(classId)
 
-  // Redirect if class not found
+  // Extract studio and instructor from the fetched class data
+  const studioData = classData?.studio || null
+  const instructorData = classData?.instructor || null
+
+  // Redirect if class not found (after loading completes)
   useEffect(() => {
-    if (!classData) {
+    if (!classLoading && !classData && !classError) {
+      console.log('📍 Class not found, redirecting to discover')
       navigate('/discover')
     }
-  }, [classData, navigate])
+  }, [classData, classLoading, classError, navigate])
 
   // Handle form input changes
   const handleInputChange = (e) => {
