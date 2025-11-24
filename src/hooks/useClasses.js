@@ -16,6 +16,7 @@ export function useClasses(filters = {}) {
 
   const fetchClasses = async () => {
     try {
+      console.log('🔍 fetchClasses started')
       setLoading(true)
       setError(null)
 
@@ -178,11 +179,13 @@ export function useClasses(filters = {}) {
         })
       }
 
+      console.log('🔍 Setting classes, count:', result.length)
       setClasses(result)
     } catch (err) {
-      console.error('Error fetching classes:', err)
+      console.error('❌ Error fetching classes:', err)
       setError(err.message)
     } finally {
+      console.log('🔍 Setting loading to false')
       setLoading(false)
     }
   }

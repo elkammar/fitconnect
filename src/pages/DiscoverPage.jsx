@@ -59,7 +59,14 @@ export default function DiscoverPage() {
 
   // Handle class booking
   const handleBookClass = (classData) => {
-    navigate(`/booking/${classData.id}`)
+    console.log('📍 handleBookClass called with:', classData.id)
+    console.log('📍 Attempting to navigate to:', `/booking/${classData.id}`)
+    try {
+      navigate(`/booking/${classData.id}`)
+      console.log('📍 Navigate called successfully')
+    } catch (error) {
+      console.error('📍 Navigation error:', error)
+    }
   }
 
   return (
