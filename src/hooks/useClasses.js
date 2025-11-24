@@ -126,10 +126,17 @@ export function useClasses(filters = {}) {
         query = query.lte('price', filters.maxPrice)
       }
 
-      // Execute query
-      const { data, error: fetchError } = await query
+      // Execute query with timeout
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Query timeout - falling back to mock data')), 5000)
+      )
 
-      if (fetchError) throw fetchError
+      const { data, error: fetchError } = await Promise.race([query, timeoutPromise])
+
+      if (fetchError) {
+        console.warn('Supabase query failed, falling back to mock data:', fetchError.message)
+        throw fetchError
+      }
 
       let result = data || []
 
