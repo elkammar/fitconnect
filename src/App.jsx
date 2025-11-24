@@ -3,6 +3,7 @@ import AppProvider from './context/AppProvider'
 import Navigation from './components/Navigation'
 import HomePage from './pages/HomePage'
 import DiscoverPage from './pages/DiscoverPage'
+import HowItWorksPage from './pages/HowItWorksPage'
 import StudioDashboardPage from './pages/StudioDashboardPage'
 import ProfilePage from './pages/ProfilePage'
 import BookingPage from './pages/BookingPage'
@@ -21,6 +22,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/discover" element={<DiscoverPage />} />
+            <Route path="/how-it-works" element={<HowItWorksPage />} />
             <Route path="/studio-dashboard" element={<StudioDashboardPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/booking/:classId" element={<BookingPage />} />
