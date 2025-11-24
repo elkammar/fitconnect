@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Direct Supabase Test</title>
+  <style>
+    body { font-family: monospace; padding: 20px; }
+    .result { margin: 10px 0; padding: 10px; border-radius: 5px; }
+    .success { background: #d4edda; color: #155724; }
+    .error { background: #f8d7da; color: #721c24; }
+    .info { background: #d1ecf1; color: #0c5460; }
+  </style>
+</head>
+<body>
+  <h1>Direct Supabase Connection Test</h1>
+  <button onclick="runTest()">Run Test</button>
+  <div id="results"></div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
+
+    const SUPABASE_URL = 'https://qeibvqgdzyjjaybkzztl.supabase.co'
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFlaWJ2cWdkenlqamF5Ymt6enRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM2MjQ0NzYsImV4cCI6MjA3OTIwMDQ3Nn0.sswfqcb29puY5rgIriIhla9q15m2E4rwseXfFS54liA'
+
+    function log(message, type = 'info') {
+      const div = document.createElement('div')
+      div.className = `result ${type}`
+      div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`
+      document.getElementById('results').appendChild(div)
+      console.log(message)
+    }
+
+    window.runTest = async function() {
+      document.getElementById('results').innerHTML = ''
+
+      try {
+        log('Creating Supabase client...')
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+        log('✅ Client created', 'success')
+
+        log('Starting count query...')
+        const start = Date.now()
+
+        const { count, error } = await supabase
+          .from('classes')
+          .select('*', { count: 'exact', head: true })
+
+        const duration = Date.now() - start
+
+        if (error) {
+          log(`❌ Error: ${error.message}`, 'error')
+          log(`Error details: ${JSON.stringify(error)}`, 'error')
+        } else {
+          log(`✅ Success! Found ${count} classes in ${duration}ms`, 'success')
+        }
+
+      } catch (err) {
+        log(`❌ Exception: ${err.message}`, 'error')
+        console.error(err)
+      }
+    }
+  </script>
+</body>
+</html>
