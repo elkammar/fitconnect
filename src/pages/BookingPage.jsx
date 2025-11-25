@@ -40,6 +40,12 @@ export default function BookingPage() {
   const studioData = classData?.studio || null
   const instructorData = classData?.instructor || null
 
+  // Handle image URL - support both imageUrl and image_url fields, with fallback
+  const getImageUrl = (data) => {
+    const url = data?.imageUrl || data?.image_url
+    return url || 'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=800' // HIIT class fallback
+  }
+
   // Redirect if class not found (after loading completes)
   useEffect(() => {
     if (!classLoading && !classData && !classError) {
@@ -222,9 +228,12 @@ export default function BookingPage() {
 
               {/* Class Image */}
               <img
-                src={classData.imageUrl}
+                src={getImageUrl(classData)}
                 alt={classData.name}
                 className="w-full h-64 object-cover rounded-lg"
+                onError={(e) => {
+                  e.target.src = 'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=800'
+                }}
               />
 
               {/* Class Info Grid */}
@@ -389,9 +398,12 @@ export default function BookingPage() {
                 <h3 className="font-semibold text-gray-900 mb-3">Class Details</h3>
                 <div className="flex gap-4">
                   <img
-                    src={classData.imageUrl}
+                    src={getImageUrl(classData)}
                     alt={classData.name}
                     className="w-24 h-24 object-cover rounded-lg"
+                    onError={(e) => {
+                      e.target.src = 'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=800'
+                    }}
                   />
                   <div>
                     <p className="font-medium text-gray-900">{classData.name}</p>
