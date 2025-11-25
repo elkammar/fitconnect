@@ -6,7 +6,7 @@
 
 **Connecting independent fitness studios with local fitness enthusiasts**
 
-[Live Demo](https://fitconnect.vercel.app) • [Documentation](./docs/implementation-guide.md) • [Report Issue](#)
+[Live Demo](https://fitconnect-bice.vercel.app) • [Documentation](./PROCESS.md) • [GitHub](https://github.com/elkammar/fitconnect)
 
 </div>
 
@@ -16,12 +16,12 @@
 
 FitConnect is a web-based booking platform that solves a critical problem in the boutique fitness industry: independent studios struggle with class management and booking, while fitness enthusiasts can't easily discover and book classes at local studios.
 
-This prototype was built in 10 hours as part of an AI-native development assessment, demonstrating:
-- Strategic product thinking
-- Rapid development using AI tools (Claude Code)
+This platform demonstrates:
+- Strategic product thinking and rapid prototyping
+- AI-native development using Claude Code
 - Full-stack integration (React + Supabase)
-- Professional UX design
-- Comprehensive documentation
+- Professional UX design and responsive layouts
+- Production deployment on Vercel with Supabase backend
 
 ## ✨ Key Features
 
@@ -49,7 +49,7 @@ This prototype was built in 10 hours as part of an AI-native development assessm
 
 ```bash
 # Clone the repository
-git clone [your-repo-url]
+git clone https://github.com/elkammar/fitconnect.git
 cd fitconnect
 
 # Install dependencies
@@ -64,6 +64,8 @@ npm run dev
 ```
 
 Visit `http://localhost:5173` to see the application running.
+
+**Live Demo:** The production app is hosted at [https://fitconnect-bice.vercel.app](https://fitconnect-bice.vercel.app)
 
 ### Environment Variables
 
@@ -85,8 +87,9 @@ Get these from your Supabase project settings.
 - React Router 6 - Client-side routing
 
 **Backend:**
-- Supabase - PostgreSQL database, authentication, real-time subscriptions
-- Row Level Security - Database-level authorization
+- Supabase (PostgreSQL) - Production database hosted at https://qeibvqgdzyjjaybkzztl.supabase.co
+- Supabase Auth - JWT-based authentication
+- Row Level Security (RLS) - Database-level authorization
 
 **Deployment:**
 - Vercel - Hosting and CI/CD
@@ -167,9 +170,9 @@ npm run test:coverage
 
 - [PROCESS.md](./PROCESS.md) - Development process and decisions
 - [PRD.md](./.context/PRD.md) - Product requirements and market research
-- [Implementation Guide](./docs/implementation-guide.md) - Technical details
 - [Design System](./.context/design-system.md) - UI/UX specifications
 - [Technical Decisions](./.context/technical-decisions.md) - Architecture choices
+- [User Research](./.context/user-research.md) - User insights and personas
 
 ## 🎨 Design System
 
@@ -189,15 +192,17 @@ See [design-system.md](./.context/design-system.md) for complete specifications.
 
 ## 🚢 Deployment
 
-**Production URL:** [fitconnect.vercel.app](https://fitconnect.vercel.app)
+**Production URL:** [https://fitconnect-bice.vercel.app](https://fitconnect-bice.vercel.app)
+
+**Database:** Supabase PostgreSQL (production instance)
 
 ### Deploy Your Own
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/fitconnect)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/elkammar/fitconnect)
 
 1. Click the button above
 2. Connect your GitHub account
-3. Add environment variables
+3. Set up your own Supabase project and add environment variables
 4. Deploy!
 
 ## 🔐 Authentication
@@ -208,9 +213,7 @@ FitConnect uses Supabase Auth with:
 - Row Level Security (RLS) for data protection
 - Secure password hashing (bcrypt)
 
-**Test Accounts:**
-- Studio Owner: owner@test.com / password123
-- Class Attendee: user@test.com / password123
+**Note:** Sign up with any email to create a test account on the live demo.
 
 ## 🗺️ Roadmap
 
@@ -261,12 +264,11 @@ This is a portfolio project built for demonstration purposes. However, feedback 
 
 ## 🐛 Known Issues
 
-- Payment processing is UI-only (Stripe not integrated)
+- Payment processing is UI-only (Stripe integration pending)
 - Email notifications not yet implemented
-- Analytics dashboard uses mock data
+- Some analytics use mock data
 - Search is basic string matching (no fuzzy search)
-
-See [implementation-guide.md](./docs/implementation-guide.md) for full list of limitations.
+- `users`, `bookings`, and `favorites` tables need proper schema setup
 
 ## 📝 License
 
@@ -274,25 +276,24 @@ This project is part of a portfolio demonstration. All rights reserved.
 
 ## 👤 Author
 
-**[Your Name]**
-- GitHub: [@yourusername](https://github.com/yourusername)
-- LinkedIn: [Your LinkedIn](https://linkedin.com/in/yourprofile)
-- Email: your.email@example.com
+**Abdullah E**
+- GitHub: [@elkammar](https://github.com/elkammar)
+- Repository: [github.com/elkammar/fitconnect](https://github.com/elkammar/fitconnect)
 
 ## 🙏 Acknowledgments
 
 - **Claude Code** - AI-assisted development
-- **Anthropic** - For the assessment opportunity
-- **Supabase** - Backend infrastructure
-- **Vercel** - Hosting and deployment
+- **Anthropic** - Claude AI platform
+- **Supabase** - Backend infrastructure and hosting
+- **Vercel** - Frontend hosting and deployment
 - **Tailwind CSS** - Styling framework
-- **Unsplash** - Stock photos
+- **Unsplash** - Stock imagery
 
 ---
 
 <div align="center">
 
-**Built with ❤️ in 10 hours using AI-native development**
+**Built using AI-native development with Claude Code**
 
 [⬆ Back to Top](#fitconnect---local-fitness-class-booking-platform)
 
